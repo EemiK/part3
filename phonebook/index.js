@@ -30,7 +30,7 @@ app.get('/api/persons', (request, response) => {
     response.json(persons)
 })
 
-app.get('/api/notes/:id', (request, response) => {
+app.get('/api/persons/:id', (request, response) => {
     const id = Number(request.params.id)
     const person = persons.find(person => person.id === id)
     if (person) {
@@ -40,12 +40,47 @@ app.get('/api/notes/:id', (request, response) => {
     }
 })
 
-const generateId = () => {
-    const maxId = persons.length > 0
-        ? Math.max(...persons.map(n => n.id))
-        : 0
-    return maxId + 1
-}
+app.get('/info', (request, response) => {
+    response.send(`
+    <p>Phonebook has info for ${persons.length} people</p>               
+    <p>${new Date()}</p>
+    `)
+})
+
+const generateId = () => Math.floor(Math.random() * 1000)
+
+app.delete('/api/persons/:id', (request, response) => {
+    const id = Number(request.params.id)
+    persons = persons.filter(note => note.id !== id)
+
+    response.status(204).end()
+})
+
+app.post('/api/persons', (request, response) => {
+    const body = request.body
+
+    if (!body.name || !body.number) {
+        return response.status(400).json({
+            error: 'name or number missing'
+        })
+    }
+
+    if (persons.map(p => p.name).includes(body.name)) {
+        return response.status(400).json({
+            error: 'name must be unique'
+        })
+    }
+
+    const person = {
+        id: generateId(),
+        name: body.name,
+        number: body.number
+    }
+
+    persons = persons.concat(person)
+
+    response.json(person)
+})
 
 const PORT = 3001
 app.listen(PORT)
