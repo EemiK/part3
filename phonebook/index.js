@@ -1,8 +1,10 @@
 const express = require('express')
 const morgan = require('morgan')
+const cors = require('cors')
 const app = express()
 
 app.use(express.json())
+app.use(cors())
 app.use(morgan((tokens, req, res) => {
     let data = JSON.stringify(req.body)
     if (data === '{}') data = ''
@@ -41,7 +43,7 @@ let persons = [
 
 app.morgan
 
-app.get('/api/persons', (request, response) => {
+app.get('/persons', (request, response) => {
     response.json(persons)
 })
 
