@@ -1,1 +1,9 @@
-GET http://localhost:3001/api/notes/1
+POST http://localhost:3001/api/notes/1
+Content-Type: application/json
+
+{
+    "content": "VS code can be used for debugging",
+    "date": "1st of april",
+    "id": 5,
+    "important": true
+}

@@ -2,6 +2,25 @@ const express = require('express')
 const morgan = require('morgan')
 const cors = require('cors')
 const app = express()
+const mongoose = require('mongoose')
+const Person = require('./models/person')
+
+password = process.argv[2]
+
+const personSchema = new mongoose.Schema({
+    name: String,
+    number: String,
+})
+
+personSchema.set('toJSON', {
+    transform: (document, returnedObject) => {
+        returnedObject.id = returnedObject._id.toString()
+        delete returnedObject._id
+        delete returnedObject.__v
+    }
+})
+
+const Person = mongoose.model('Person', personSchema)
 
 app.use(express.json())
 app.use(cors())
@@ -45,7 +64,9 @@ let persons = [
 app.morgan
 
 app.get('/persons', (request, response) => {
-    response.json(persons)
+    Person.find({}).then(people => {
+        response.json(people)
+    })
 })
 
 app.get('/persons/:id', (request, response) => {
@@ -100,6 +121,6 @@ app.post('/persons', (request, response) => {
     response.json(person)
 })
 
-const PORT = 8080
+const PORT = 3001
 app.listen(PORT)
 console.log(`Server running on port ${PORT}`)
