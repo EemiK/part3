@@ -1,1 +1,1 @@
-DELETE https://f-s-phonebook.fly.dev/persons/1
+DELETE http://localhost:3001/persons/6414422790b1b907df95ecab
