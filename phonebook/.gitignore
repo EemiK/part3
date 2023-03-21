@@ -4,3 +4,5 @@ fly.toml
 Dockerfile
 .dockerignore
 build/
+.eslintignore
+.eslintrc.js
